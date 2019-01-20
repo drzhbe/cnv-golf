@@ -1,0 +1,94 @@
+<style>
+  canvas{width:100%;height:100%}
+  body{margin:0}
+  a{position:absolute;right:10px;top:10px;}
+</style>
+<canvas ondrop='D(event)' ondragover='event.preventDefault()'></canvas>
+<a href='' onclick='L(event)'>download</a>
+<script>
+  function f(a) {
+  var b = 0;
+  return function() {
+    return b < a.length ? {done:!1, value:a[b++]} : {done:!0};
+  };
+}
+function g(a) {
+  if (!(a instanceof Array)) {
+    var b = "undefined" != typeof Symbol && Symbol.iterator && a[Symbol.iterator];
+    a = b ? b.call(a) : {next:f(a)};
+    for (var c = []; !(b = a.next()).done;) {
+      c.push(b.value);
+    }
+    a = c;
+  }
+  return a;
+}
+var h = document.querySelector("canvas"), k = window, l = k.z, m = devicePixelRatio || 1, n = k.innerWidth, p = k.innerHeight, q = document.addEventListener, r = requestAnimationFrame, t = h.getContext("2d"), u = [], v = [], w,
+D=a=>{
+  a.preventDefault();
+  [].concat(g(a.dataTransfer.items)).map(function(a) {
+    return a.getAsFile();
+  }).map(function(a) {
+    var b = new Image;
+    b.onload = _ => x(b);
+    b.src = URL.createObjectURL(a);
+  });
+},
+L=e=>{e.target.href = h.toDataURL(),e.target.link = 'golf.png'},
+x = a => {
+  var b = a.width, c = a.height, e = b, d = c;
+  b > c ? b > n && (e = n, d = c * n / b) : c > p && (d = p, e = b * p / c);
+  u.push({t:0, a:a, x:0, y:0, c:e, b:d});
+}
+function y(a, b) {
+  return z(a, b, v, v.length) || z(a, b, u, u.length);
+}
+function z(a, b, c, e) {
+  for (; e--;) {
+    var d = c[e];
+    if (a > d.x && a < d.x + d.c && b > d.y && b < d.y + d.b) {
+      return c[e];
+    }
+  }
+}
+var A = [function(a) {
+  return t.drawImage(a.a, a.x, a.y, a.c, a.b);
+}, function(a) {
+  return t.fillText(a.a, a.x, a.y + 20);
+}];
+function B() {
+  t.clearRect(0, 0, n, p);
+  u.concat(v).forEach(function(a) {
+    return A[a.t](a);
+  });
+  r(B);
+}
+h.width = n * m;
+h.height = p * m;
+t.scale(m, m);
+t.font = "20pt Serif";
+q("mousedown", function(a) {
+  w = (element = y(a.x, a.y)) && {e:element, f:a.x - element.x, g:a.y - element.y};
+  q("mouseup", function() {
+    return w = l;
+  });
+});
+q("mousemove", function(a) {
+  var b;
+  if (b = w) {
+    b = a.y;
+    var c = w, e = c.e, d = c.g;
+    e.x = a.x - c.f;
+    e.y = b - d;
+    b = void 0;
+  }
+  return b;
+});
+q("keydown", function(a) {
+  if (a = "t" == a.key) {
+    a = v.push({t:1, a:"Golf Wang", x:n / 2 - t.measureText("Golf Wang").width / 2, y:p / 2 - 20, c:k, b:20});
+  }
+  return a;
+});
+r(B);
+</script>
