@@ -1,94 +1,21 @@
-<style>
-  canvas{width:100%;height:100%}
-  body{margin:0}
-  a{position:absolute;right:10px;top:10px;}
-</style>
-<canvas ondrop='D(event)' ondragover='event.preventDefault()'></canvas>
-<a href='' onclick='L(event)'>download</a>
+<canvas>
 <script>
-  function f(a) {
-  var b = 0;
-  return function() {
-    return b < a.length ? {done:!1, value:a[b++]} : {done:!0};
-  };
-}
-function g(a) {
-  if (!(a instanceof Array)) {
-    var b = "undefined" != typeof Symbol && Symbol.iterator && a[Symbol.iterator];
-    a = b ? b.call(a) : {next:f(a)};
-    for (var c = []; !(b = a.next()).done;) {
-      c.push(b.value);
-    }
-    a = c;
-  }
-  return a;
-}
-var h = document.querySelector("canvas"), k = window, l = k.z, m = devicePixelRatio || 1, n = k.innerWidth, p = k.innerHeight, q = document.addEventListener, r = requestAnimationFrame, t = h.getContext("2d"), u = [], v = [], w,
-D=a=>{
-  a.preventDefault();
-  [].concat(g(a.dataTransfer.items)).map(function(a) {
-    return a.getAsFile();
-  }).map(function(a) {
-    var b = new Image;
-    b.onload = _ => x(b);
-    b.src = URL.createObjectURL(a);
-  });
-},
-L=e=>{e.target.href = h.toDataURL(),e.target.link = 'golf.png'},
-x = a => {
-  var b = a.width, c = a.height, e = b, d = c;
-  b > c ? b > n && (e = n, d = c * n / b) : c > p && (d = p, e = b * p / c);
-  u.push({t:0, a:a, x:0, y:0, c:e, b:d});
-}
-function y(a, b) {
-  return z(a, b, v, v.length) || z(a, b, u, u.length);
-}
-function z(a, b, c, e) {
-  for (; e--;) {
-    var d = c[e];
-    if (a > d.x && a < d.x + d.c && b > d.y && b < d.y + d.b) {
-      return c[e];
-    }
-  }
-}
-var A = [function(a) {
-  return t.drawImage(a.a, a.x, a.y, a.c, a.b);
-}, function(a) {
-  return t.fillText(a.a, a.x, a.y + 20);
-}];
-function B() {
-  t.clearRect(0, 0, n, p);
-  u.concat(v).forEach(function(a) {
-    return A[a.t](a);
-  });
-  r(B);
-}
-h.width = n * m;
-h.height = p * m;
-t.scale(m, m);
-t.font = "20pt Serif";
-q("mousedown", function(a) {
-  w = (element = y(a.x, a.y)) && {e:element, f:a.x - element.x, g:a.y - element.y};
-  q("mouseup", function() {
-    return w = l;
-  });
-});
-q("mousemove", function(a) {
-  var b;
-  if (b = w) {
-    b = a.y;
-    var c = w, e = c.e, d = c.g;
-    e.x = a.x - c.f;
-    e.y = b - d;
-    b = void 0;
-  }
-  return b;
-});
-q("keydown", function(a) {
-  if (a = "t" == a.key) {
-    a = v.push({t:1, a:"Golf Wang", x:n / 2 - t.measureText("Golf Wang").width / 2, y:p / 2 - 20, c:k, b:20});
-  }
-  return a;
-});
-r(B);
+let d=document,q='querySelector',c=d[q]('canvas'),w=this,W=w.innerWidth,H=w.innerHeight,s='addEventListener',l=d[s],X=c.getContext('2d'),D=devicePixelRatio||1,F=20,Z='Golf Wang',E=[],A,a,u,I=e=>e.preventDefault()||[...e.dataTransfer.items].map(i => i.getAsFile()).map((f,i)=>{i=new Image()
+i.onload=_=>{let a=i.width,b=i.height,c=a,d=b;a>b?a>W&&(c=W,d=b*W/a):b>H&&(d=H,c=a*d/b);E.unshift([0,i,0,0,c,d])}
+i.src=URL.createObjectURL(f)}),r=_=>(X.clearRect(0,0,W,H),E.map(([t,c,x,y,w,h])=>t?X.fillText(c,x,y+F):X.drawImage(c,x,y,w,h)),requestAnimationFrame(r))
+c.width=W*D
+c.height=H*D
+c.style.width='100%'
+c.style.height='100%'
+X.scale(D,D)
+X.font=F+'pt Serif'
+l('mousedown',({x,y},e)=>{e=A=[...E].reverse().find(([t,c,X,Y,W,H])=>x>X&&x<X+W&&y>Y&&y<Y+H)
+a=e&&{e,X:x-e[2],Y:y-e[3]}})
+l('mouseup',_=>a=u)
+l('mousemove',p=>a&&(a.e[2]=p.x-a.X,a.e[3]=p.y-a.Y))
+l('keydown',(e,w,i)=>(e.key=='t'&&(w=X.measureText(Z).width)&&E.push([1,Z,W/2-w/2,H/2-F,w,F]),e.which==8&&(E=E.filter(e=>e!=A))))
+d[q]('body').style.margin=0
+c[s]('drop',I)
+c[s]('dragover',e=>e.preventDefault())
+r()
 </script>
