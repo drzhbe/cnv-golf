@@ -1,12 +1,12 @@
-<canvas>
+<canvas id='K'>
 <script>
-let d=document,q='querySelector',c=d[q]('canvas'),w=this,W=w.innerWidth,H=w.innerHeight,s='addEventListener',l=d[s],X=c.getContext('2d'),D=devicePixelRatio||1,F=20,Z='Golf Wang',E=[],A,a,u,I=e=>e.preventDefault()||[...e.dataTransfer.items].map(i => i.getAsFile()).map((f,i)=>{i=new Image()
+let d=document,q='querySelector',w=this,W=w.innerWidth,H=w.innerHeight,s='addEventListener',l=d[s],X=K.getContext('2d'),D=devicePixelRatio||1,F=20,Z='Golf Wang',E=[],A,a,u,I=e=>e.preventDefault()||[...e.dataTransfer.items].map(i => i.getAsFile()).map((f,i)=>{i=new Image()
 i.onload=_=>{let a=i.width,b=i.height,c=a,d=b;a>b?a>W&&(c=W,d=b*W/a):b>H&&(d=H,c=a*d/b);E.unshift([0,i,0,0,c,d])}
 i.src=URL.createObjectURL(f)}),r=_=>(X.clearRect(0,0,W,H),E.map(([t,c,x,y,w,h])=>t?X.fillText(c,x,y+F):X.drawImage(c,x,y,w,h)),requestAnimationFrame(r))
-c.width=W*D
-c.height=H*D
-c.style.width='100%'
-c.style.height='100%'
+K.width=W*D
+K.height=H*D
+K.style.width='100%'
+K.style.height='100%'
 X.scale(D,D)
 X.font=F+'pt Serif'
 l('mousedown',({x,y},e)=>{e=A=[...E].reverse().find(([t,c,X,Y,W,H])=>x>X&&x<X+W&&y>Y&&y<Y+H)
@@ -15,7 +15,7 @@ l('mouseup',_=>a=u)
 l('mousemove',p=>a&&(a.e[2]=p.x-a.X,a.e[3]=p.y-a.Y))
 l('keydown',(e,w,i)=>(e.key=='t'&&(w=X.measureText(Z).width)&&E.push([1,Z,W/2-w/2,H/2-F,w,F]),e.which==8&&(E=E.filter(e=>e!=A))))
 d[q]('body').style.margin=0
-c[s]('drop',I)
-c[s]('dragover',e=>e.preventDefault())
+K[s]('drop',I)
+K[s]('dragover',e=>e.preventDefault())
 r()
 </script>
